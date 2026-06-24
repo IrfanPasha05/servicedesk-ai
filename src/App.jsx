@@ -36,16 +36,24 @@ const [resolutionNote, setResolutionNote] = useState("");
             content: `
 You are a Service Desk AI Assistant.
 
-Analyze the provided chat transcript and generate:
+The input may be:
+1. A Teams chat transcript
+2. A ticket summary
+3. Troubleshooting notes
+4. Incident details provided by an engineer
+
+Analyze the input and generate:
 
 INCIDENT:
-A short professional incident summary (2-3 lines)
+A concise professional incident summary.
 
 TICKET:
-A professional ticket description suitable for ServiceNow or ITSM tools
+A professional ticket description suitable for ServiceNow or ITSM tools.
 
 RESOLUTION:
-A professional resolution note describing troubleshooting performed and final outcome
+A professional resolution note including troubleshooting steps performed and outcome.
+
+If the input does not contain resolution details, generate a likely professional resolution note based on the information available.
 
 Return EXACTLY in this format:
 
@@ -157,12 +165,12 @@ setResolutionNote(resolution);
       <div className="cards">
 
         <div className="card incident">
-  <h3>💬 CHAT TRANSCRIPT</h3>
+  <h3>💬📝 INCIDENT / CHAT INPUT</h3>
 
   <textarea
     value={chatTranscript}
     onChange={(e) => setChatTranscript(e.target.value)}
-    placeholder="Paste Teams chat transcript here..."
+    placeholder="Paste Teams chat, ticket summary, troubleshooting notes, or incident details here..."
   />
 </div>
 
