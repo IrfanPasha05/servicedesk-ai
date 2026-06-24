@@ -149,17 +149,18 @@ body{
 
 /* DXC HOLOGRAM */
 
-.hologram{
-  width: 500px;px;
-  height:auto;
+/* DXC HOLOGRAM */
 
-  object-fit:contain;
+.hologram{
+  width: 350px;
+  height: auto;
+  object-fit: contain;
 
   animation:
     spinDXC 25s linear infinite,
     pulseDXC 3s ease-in-out infinite;
 
-  transform-style:preserve-3d;
+  transform-style: preserve-3d;
 }
 
 /* CARDS */
