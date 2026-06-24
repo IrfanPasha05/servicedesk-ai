@@ -6,9 +6,11 @@ import hologram from "./assets/hologram.png";
 import openRouter from "./openrouter";
 
 function App() {
-  const [incident, setIncident] = useState("");
-  const [ticketDescription, setTicketDescription] = useState("");
-  const [resolutionNote, setResolutionNote] = useState("");
+  
+  const [chatTranscript, setChatTranscript] = useState("");
+const [incident, setIncident] = useState("");
+const [ticketDescription, setTicketDescription] = useState("");
+const [resolutionNote, setResolutionNote] = useState("");
 
   const copyText = (text) => {
     navigator.clipboard.writeText(text);
@@ -16,7 +18,7 @@ function App() {
   };
 
   const analyzeIncident = async () => {
-    if (!incident.trim()) {
+    if (!chatTranscript.trim()) {
       alert("Please enter an incident summary.");
       return;
     }
@@ -32,20 +34,23 @@ function App() {
           {
             role: "system",
             content: `
-You are an experienced IT Service Desk Analyst.
+You are a Service Desk AI Assistant.
 
-Generate:
+Analyze the provided chat transcript and generate:
 
-1. Professional Ticket Description
-2. Professional Resolution Note
+INCIDENT:
+A short professional incident summary (2-3 lines)
 
-Rules:
-- Do not write "Here's the professional response"
-- Do not add headings
-- Write in enterprise service desk style
-- Keep it concise and professional
+TICKET:
+A professional ticket description suitable for ServiceNow or ITSM tools
 
-Return exactly in this format:
+RESOLUTION:
+A professional resolution note describing troubleshooting performed and final outcome
+
+Return EXACTLY in this format:
+
+INCIDENT:
+<incident summary>
 
 TICKET:
 <ticket description>
@@ -56,7 +61,7 @@ RESOLUTION:
           },
           {
             role: "user",
-            content: incident
+            content: chatTranscript
           }
         ]
       });
@@ -64,13 +69,23 @@ RESOLUTION:
       const result =
         response.data.choices[0].message.content;
 
-      const ticket =
-        result.split("RESOLUTION:")[0]
-          .replace("TICKET:", "")
-          .trim();
+      const incidentSummary =
+  result.split("TICKET:")[0]
+    .replace("INCIDENT:", "")
+    .trim();
 
-      const resolution =
-        result.split("RESOLUTION:")[1]?.trim() || "";
+const ticket =
+  result.split("TICKET:")[1]
+    ?.split("RESOLUTION:")[0]
+    ?.trim() || "";
+
+const resolution =
+  result.split("RESOLUTION:")[1]
+    ?.trim() || "";
+
+setIncident(incidentSummary);
+setTicketDescription(ticket);
+setResolutionNote(resolution);
 
       setTicketDescription(ticket);
       setResolutionNote(resolution);
@@ -142,16 +157,22 @@ RESOLUTION:
       <div className="cards">
 
         <div className="card incident">
+  <h3>💬 CHAT TRANSCRIPT</h3>
 
-          <h3>📋 INCIDENT SUMMARY</h3>
+  <textarea
+    value={chatTranscript}
+    onChange={(e) => setChatTranscript(e.target.value)}
+    placeholder="Paste Teams chat transcript here..."
+  />
+</div>
 
-          <textarea
-            value={incident}
-            onChange={(e) => setIncident(e.target.value)}
-            placeholder="Enter incident summary..."
-          />
+<div className="card ticket">
+  <h3>📋 INCIDENT SUMMARY</h3>
 
-        </div>
+  <div className="output-box">
+    {incident}
+  </div>
+</div>
 
         <div className="card ticket">
 
