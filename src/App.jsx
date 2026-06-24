@@ -6,11 +6,12 @@ import hologram from "./assets/hologram.png";
 import openRouter from "./openrouter";
 
 function App() {
-  
+  const [customerEmail, setCustomerEmail] = useState("");
   const [chatTranscript, setChatTranscript] = useState("");
 const [incident, setIncident] = useState("");
 const [ticketDescription, setTicketDescription] = useState("");
 const [resolutionNote, setResolutionNote] = useState("");
+
 
   const copyText = (text) => {
     navigator.clipboard.writeText(text);
@@ -50,9 +51,12 @@ A concise professional incident summary.
 TICKET:
 A professional ticket description suitable for ServiceNow or ITSM tools.
 
+
 RESOLUTION:
 A professional resolution note including troubleshooting steps performed and outcome.
 
+EMAIL:
+A professional customer email update explaining the issue resolution.
 If the input does not contain resolution details, generate a likely professional resolution note based on the information available.
 
 Return EXACTLY in this format:
@@ -65,6 +69,9 @@ TICKET:
 
 RESOLUTION:
 <resolution note>
+
+EMAIL:
+<customer email>
 `
           },
           {
@@ -89,11 +96,17 @@ const ticket =
 
 const resolution =
   result.split("RESOLUTION:")[1]
+    ?.split("EMAIL:")[0]
+    ?.trim() || "";
+
+const email =
+  result.split("EMAIL:")[1]
     ?.trim() || "";
 
 setIncident(incidentSummary);
 setTicketDescription(ticket);
 setResolutionNote(resolution);
+setCustomerEmail(email);
 
       setTicketDescription(ticket);
       setResolutionNote(resolution);
@@ -201,20 +214,37 @@ setResolutionNote(resolution);
 
         <div className="card resolution">
 
-          <h3>✅ RESOLUTION NOTE</h3>
+  <h3>✅ RESOLUTION NOTE</h3>
 
-          <div className="output-box">
-            {resolutionNote}
-          </div>
+  <div className="output-box">
+    {resolutionNote}
+  </div>
 
-          <button
-            className="copy-btn"
-            onClick={() => copyText(resolutionNote)}
-          >
-            📋 Copy Resolution
-          </button>
+  <button
+    className="copy-btn"
+    onClick={() => copyText(resolutionNote)}
+  >
+    📋 Copy Resolution
+  </button>
 
-        </div>
+</div>
+
+<div className="card resolution">
+
+  <h3>📧 CUSTOMER EMAIL</h3>
+
+  <div className="output-box">
+    {customerEmail}
+  </div>
+
+  <button
+    className="copy-btn"
+    onClick={() => copyText(customerEmail)}
+  >
+    📧 Copy Email
+  </button>
+
+</div>
 
       </div>
 
