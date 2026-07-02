@@ -53,10 +53,16 @@ ${cleanedTranscript}
 
 
       const response = await openRouter.post("/chat/completions", {
-        model: "deepseek/deepseek-chat-v3",
+  model: "deepseek/deepseek-chat-v3",
 
-        messages: [
+  temperature: 0,
+  top_p: 1,
+  max_tokens: 1500,
+
+  messages: [
           {
+
+            
             role: "system",
             
 content: `
@@ -120,35 +126,6 @@ If the issue was resolved, clearly explain how.
 FACTUAL ACCURACY
 =========================
 
-This is looking much better. 👏 Your prompt is definitely improving, but I can still see one recurring issue:
-
-It is still inventing information that isn't in the transcript.
-
-For example, in your screenshots it says:
-
-❌ "The LCS team will contact the user directly..."
-❌ "within the next few hours..."
-❌ "If you do not hear from them..."
-❌ "expedited request for immediate assistance..."
-
-Those details should only appear if they are actually in the chat transcript.
-
-The reason
-
-Your current prompt says:
-
-"Do not invent information."
-
-But later it also gives examples that encourage the model to write polished emails. The model is trying to be helpful and fills in missing details.
-
-Here's how to fix it
-
-Replace your current FACTUAL ACCURACY section with this stronger version:
-
-=========================
-FACTUAL ACCURACY
-=========================
-
 Everything you write must be supported by the conversation.
 
 Never invent or assume information.
@@ -181,12 +158,7 @@ Do not promise callbacks.
 
 Do not promise resolution times.
 
-Do not promise that another team will contact the customer unless the transcript explicitly st
-Otherwise begin the email with:
-
-Hello,
-
-
+Do not promise another team will contact the customer unless explicitly stated in the transcript.
 =========================
 SERVICE DESK DOCUMENTATION RULES
 =========================
@@ -328,7 +300,7 @@ Subject: Update on Your Support Request
 
 Hello,
 
-Your issue requires additional investigation and has been escalated to the appropriate support team. They will contact you as soon as possible.
+Your issue requires additional investigation and has been escalated to the appropriate support team. Your request has been escalated to the appropriate support team for further investigation.
 
 Thank you for your patience.
 
@@ -450,11 +422,12 @@ setTicketDescription(ticket);
 setResolutionNote(resolution);
 setCustomerEmail(email);
 
-      setTicketDescription(ticket);
-      setResolutionNote(resolution);
 
     } catch (error) {
-      console.error(error);
+      console.error(
+  "OpenRouter Error:",
+  error.response?.data || error.message
+);
 
       setTicketDescription(
         "Unable to generate ticket description."
