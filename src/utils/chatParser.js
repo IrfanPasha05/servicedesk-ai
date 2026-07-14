@@ -34,14 +34,38 @@ export function cleanTranscript(chat) {
 
 export function extractIncidentData(chat) {
 
-  const applications = [];
+  const data = {
 
-  const troubleshooting = [];
+    applications: [],
 
-  let status = "Pending";
+    troubleshooting: [],
 
-  // Common enterprise apps
+    status: "Pending",
+
+    businessImpact: [],
+
+    identityVerification: [],
+
+    accountActions: [],
+
+    remoteSupport: [],
+
+    escalation: [],
+
+    errors: [],
+
+    userConfirmation: [],
+
+    ticketNumbers: []
+
+  };
+
+  // --------------------
+  // Applications
+  // --------------------
+
   const appList = [
+
     "Outlook",
     "Teams",
     "VPN",
@@ -57,61 +81,213 @@ export function extractIncidentData(chat) {
     "Citrix",
     "Windows Hello",
     "Authenticator",
-    "ServiceNow"
+    "Axis Atmos",
+    "Atmos",
+    "Jenkins",
+    "BTRS"
+
   ];
 
   appList.forEach(app => {
-    if (chat.toLowerCase().includes(app.toLowerCase())) {
-      applications.push(app);
-    }
+
+    if (chat.toLowerCase().includes(app.toLowerCase()))
+
+      data.applications.push(app);
+
   });
 
-  // Troubleshooting keywords
-  const keywords = [
-    "reset",
-    "reinstall",
-    "retry",
-    "verified",
-    "checked",
-    "cleared",
-    "installed",
-    "removed",
-    "updated",
-    "configured",
-    "rebooted",
-    "tested"
-  ];
+  // --------------------
+  // Parse line by line
+  // --------------------
 
   chat.split("\n").forEach(line => {
 
+    const lower = line.toLowerCase();
+
+    // Identity Verification
+
+    if (
+      lower.includes("employee id") ||
+      lower.includes("manager") ||
+      lower.includes("joining date") ||
+      lower.includes("verify")
+    ) {
+
+      data.identityVerification.push(line.trim());
+
+    }
+
+    // Password / Okta / PIN
+
+    if (
+      lower.includes("password") ||
+      lower.includes("okta") ||
+      lower.includes("pin") ||
+      lower.includes("windows hello") ||
+      lower.includes("fingerprint")
+    ) {
+
+      data.accountActions.push(line.trim());
+
+    }
+
+    // Troubleshooting
+
+    const keywords = [
+
+      "reset",
+      "restart",
+      "reboot",
+      "retry",
+      "checked",
+      "verified",
+      "configured",
+      "installed",
+      "uninstalled",
+      "removed",
+      "cleared",
+      "disabled",
+      "enabled",
+      "changed",
+      "updated",
+      "reinstalled"
+
+    ];
+
     keywords.forEach(keyword => {
-      if (line.toLowerCase().includes(keyword)) {
-        troubleshooting.push(line.trim());
-      }
+
+      if (lower.includes(keyword))
+
+        data.troubleshooting.push(line.trim());
+
     });
+
+    // Remote Support
+
+    if (
+
+      lower.includes("screen share") ||
+
+      lower.includes("teams") ||
+
+      lower.includes("remote") ||
+
+      lower.includes("btrs")
+
+    ) {
+
+      data.remoteSupport.push(line.trim());
+
+    }
+
+    // Escalation
+
+    if (
+
+      lower.includes("escalated") ||
+
+      lower.includes("advanced team") ||
+
+      lower.includes("resolver") ||
+
+      lower.includes("lcs") ||
+
+      lower.includes("war room")
+
+    ) {
+
+      data.escalation.push(line.trim());
+
+    }
+
+    // Business Impact
+
+    if (
+
+      lower.includes("unable") ||
+
+      lower.includes("cannot") ||
+
+      lower.includes("impact") ||
+
+      lower.includes("productivity") ||
+
+      lower.includes("cannot access")
+
+    ) {
+
+      data.businessImpact.push(line.trim());
+
+    }
+
+    // Error Messages
+
+    if (
+
+      lower.includes("error") ||
+
+      lower.includes("failed") ||
+
+      lower.includes("unavailable") ||
+
+      lower.includes("offline")
+
+    ) {
+
+      data.errors.push(line.trim());
+
+    }
+
+    // User Confirmation
+
+    if (
+
+      lower.includes("working now") ||
+
+      lower.includes("resolved") ||
+
+      lower.includes("confirmed") ||
+
+      lower.includes("successfully") ||
+
+      lower.includes("thank you")
+
+    ) {
+
+      data.userConfirmation.push(line.trim());
+
+    }
+
+    // Ticket Numbers
+
+    const match = line.match(/INC\d+/i);
+
+    if (match)
+
+      data.ticketNumbers.push(match[0]);
 
   });
 
-  if (/resolved|working|fixed|confirmed/i.test(chat))
-    status = "Resolved";
+  // --------------------
+  // Status
+  // --------------------
 
-  if (/escalated|lcs|resolver team/i.test(chat))
-    status = "Escalated";
+  if (/resolved|working now|issue resolved|confirmed/i.test(chat))
 
-  if (/pending|awaiting/i.test(chat))
-    status = "Pending";
+    data.status = "Resolved";
 
-  if (/disconnected|ended before/i.test(chat))
-    status = "Incomplete";
+  else if (/escalated|advanced team|resolver|lcs/i.test(chat))
 
-  return {
+    data.status = "Escalated";
 
-    applications,
+  else if (/pending|awaiting|investigation/i.test(chat))
 
-    troubleshooting,
+    data.status = "Pending";
 
-    status
+  else if (/disconnected|ended before|offline/i.test(chat))
 
-  };
+    data.status = "Incomplete";
+
+  return data;
 
 }
