@@ -2603,9 +2603,17 @@ setCustomerEmail(email);
 <div className="card ticket">
   <h3>📋 SHORT DESCRIPTION</h3>
 
-  <div className="output-box">
-    {incident}
-  </div>
+<div className="output-box">
+  {incident}
+</div>
+
+<button
+  className="copy-btn"
+  onClick={() => copyText(incident)}
+>
+  📋 Copy Short 
+</button>
+
 </div>
 
         <div className="card ticket">
