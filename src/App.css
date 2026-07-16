@@ -445,3 +445,42 @@ body,
 }
 
 }
+/* Existing CSS */
+
+/* Your existing styles */
+
+.card {
+  ...
+}
+
+.output-box {
+  ...
+}
+
+/* ========================= */
+/* Add Refresh Button CSS Below */
+/* ========================= */
+
+.refresh-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.refresh-btn {
+  background: transparent;
+  color: #00d9ff;
+  border: 2px solid #00d9ff;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: #00d9ff;
+  color: #08101f;
+  box-shadow: 0 0 12px #00d9ff;
+}

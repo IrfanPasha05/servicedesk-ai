@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
 
 import {
@@ -10,6 +10,9 @@ import hologram from "./assets/hologram.png";
 import openRouter from "./openrouter";
 
 function App() {
+  const textareaRef = useRef(null);
+
+
   const [customerEmail, setCustomerEmail] = useState("");
   const [chatTranscript, setChatTranscript] = useState("");
 const [incident, setIncident] = useState("");
@@ -22,7 +25,21 @@ const [resolutionNote, setResolutionNote] = useState("");
     alert("Copied successfully!");
   };
 
+  const handleRefresh = () => {
+  setChatTranscript("");
+  setIncident("");
+  setTicketDescription("");
+  setResolutionNote("");
+  setCustomerEmail("");
+
+  if (textareaRef.current) {
+    textareaRef.current.focus();
+  }
+};
+
   const analyzeIncident = async () => {
+    
+
     if (!chatTranscript.trim()) {
       alert("Please enter an incident summary.");
       return;
@@ -2566,14 +2583,25 @@ setCustomerEmail(email);
   <h3>💬📝 INCIDENT / CHAT INPUT</h3>
 
   <textarea
+  ref={textareaRef}
     value={chatTranscript}
     onChange={(e) => setChatTranscript(e.target.value)}
     placeholder="Paste Teams chat, ticket summary, troubleshooting notes, or incident details here..."
   />
+
+  <div className="refresh-container">
+  <button
+    className="refresh-btn"
+    onClick={handleRefresh}
+    title="Clear everything"
+  >
+    🔄 Refresh
+  </button>
+</div>
 </div>
 
 <div className="card ticket">
-  <h3>📋 INCIDENT SUMMARY</h3>
+  <h3>📋 SHORT DESCRIPTION</h3>
 
   <div className="output-box">
     {incident}
