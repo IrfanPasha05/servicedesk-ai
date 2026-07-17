@@ -2611,7 +2611,7 @@ setCustomerEmail(email);
   className="copy-btn"
   onClick={() => copyText(incident)}
 >
-  📋 Copy Short 
+  📋 Copy Short Description
 </button>
 
 </div>
