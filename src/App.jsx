@@ -2628,7 +2628,7 @@ setCustomerEmail(email);
             className="copy-btn"
             onClick={() => copyText(ticketDescription)}
           >
-            📋 Copy Ticket
+            📋 Copy Ticket DESCRIPTION
           </button>
 
         </div>
