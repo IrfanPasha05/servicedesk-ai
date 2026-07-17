@@ -13,7 +13,7 @@ function App() {
   const textareaRef = useRef(null);
 
 
-  const [customerEmail, setCustomerEmail] = useState("");
+  
   const [chatTranscript, setChatTranscript] = useState("");
 const [incident, setIncident] = useState("");
 const [ticketDescription, setTicketDescription] = useState("");
@@ -30,8 +30,7 @@ const [resolutionNote, setResolutionNote] = useState("");
   setIncident("");
   setTicketDescription("");
   setResolutionNote("");
-  setCustomerEmail("");
-
+  
   if (textareaRef.current) {
     textareaRef.current.focus();
   }
@@ -1975,14 +1974,6 @@ RESOLUTION:
 
 <Professional Resolution Notes>
 
-EMAIL:
-
-<Professional Customer Email>
-
-Do not change the section names.
-
-Do not add additional sections.
-
 ==================================================
 INCIDENT REQUIREMENTS
 ==================================================
@@ -2497,17 +2488,12 @@ const ticket =
 
 const resolution =
   result.split("RESOLUTION:")[1]
-    ?.split("EMAIL:")[0]
-    ?.trim() || "";
-
-const email =
-  result.split("EMAIL:")[1]
     ?.trim() || "";
 
 setIncident(incidentSummary);
 setTicketDescription(ticket);
 setResolutionNote(resolution);
-setCustomerEmail(email);
+
 
 
     } catch (error) {
@@ -2649,26 +2635,10 @@ setCustomerEmail(email);
   </button>
 
 </div>
-
-<div className="card resolution">
-
-  <h3>📧 CUSTOMER EMAIL</h3>
-
-  <div className="output-box">
-    {customerEmail}
-  </div>
-
-  <button
-    className="copy-btn"
-    onClick={() => copyText(customerEmail)}
-  >
-    📧 Copy Email
-  </button>
-
+ 
 </div>
 
-      </div>
-
+      
       {/* BUTTON */}
 
       <div className="button-area">
