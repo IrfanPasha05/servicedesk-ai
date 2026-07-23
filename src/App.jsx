@@ -2586,23 +2586,8 @@ setResolutionNote(resolution);
 </div>
 </div>
 
-<div className="card ticket">
-  <h3>📋 SHORT DESCRIPTION</h3>
 
-<div className="output-box">
-  {incident}
-</div>
-
-<button
-  className="copy-btn"
-  onClick={() => copyText(incident)}
->
-  📋 Copy Short Description
-</button>
-
-</div>
-
-        <div className="card ticket">
+ <div className="card ticket">
 
           <h3>📄 TICKET DESCRIPTION</h3>
 
