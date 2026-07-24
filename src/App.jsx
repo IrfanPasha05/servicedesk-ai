@@ -1962,13 +1962,9 @@ OUTPUT FORMAT
 
 Return EXACTLY in the following structure.
 
-INCIDENT:
+WORK NOTES:
 
-<Professional Incident Summary>
-
-TICKET:
-
-<Professional ServiceNow Ticket Description>
+<Professional ServiceNow Work Notes>
 
 RESOLUTION:
 
@@ -2476,13 +2472,8 @@ END OF PROMPT
       const result =
         response.data.choices[0].message.content;
 
-      const incidentSummary =
-  result.split("TICKET:")[0]
-    .replace("INCIDENT:", "")
-    .trim();
-
-const ticket =
-  result.split("TICKET:")[1]
+      const workNotes =
+  result.split("WORK NOTES:")[1]
     ?.split("RESOLUTION:")[0]
     ?.trim() || "";
 
@@ -2490,8 +2481,8 @@ const resolution =
   result.split("RESOLUTION:")[1]
     ?.trim() || "";
 
-setIncident(incidentSummary);
-setTicketDescription(ticket);
+
+setTicketDescription(workNotes);
 setResolutionNote(resolution);
 
 
@@ -2589,7 +2580,7 @@ setResolutionNote(resolution);
 
  <div className="card ticket">
 
-          <h3>📄 TICKET DESCRIPTION</h3>
+          <h3>📄 WORK NOTES</h3>
 
           <div className="output-box">
             {ticketDescription}
@@ -2599,7 +2590,7 @@ setResolutionNote(resolution);
             className="copy-btn"
             onClick={() => copyText(ticketDescription)}
           >
-            📋 Copy Ticket DESCRIPTION
+             📋 Copy Work Notes
           </button>
 
         </div>
